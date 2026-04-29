@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kairos — Fretes 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0c10;--sur:#111318;--sur2:#181b22;--bor:#252830;
+  --acc:#00e5a0;--blu:#0090ff;--tex:#e8eaf0;--mut:#6b7080;
+  --c-ent:#00e5a0;--c-col:#0090ff;--c-env:#ffb547;
+  --c-agc:#a855f7;--c-sed:#22d3ee;--c-can:#ff4d6a;
+}
+body{background:var(--bg);color:var(--tex);font-family:'DM Sans',sans-serif;min-height:100vh}
+
+/* ─ HEADER ─ */
+header{position:sticky;top:0;z-index:200;background:rgba(17,19,24,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--bor);height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;gap:16px}
+.logo{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;display:flex;align-items:center;gap:9px;white-space:nowrap}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--acc);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.h-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.badge-live{display:flex;align-items:center;gap:6px;background:rgba(0,229,160,.08);border:1px solid rgba(0,229,160,.2);border-radius:99px;padding:4px 12px;font-size:11px;color:var(--acc)}
+.badge-live span{width:5px;height:5px;border-radius:50%;background:var(--acc);animation:blink 1.5s infinite}
+#ts{font-size:12px;color:var(--mut)}
+
+/* ─ BTN COMPROVANTES ─ */
+.btn-comp{display:flex;align-items:center;gap:7px;background:rgba(0,144,255,.1);border:1px solid rgba(0,144,255,.3);border-radius:10px;padding:7px 14px;font-size:13px;font-weight:600;color:var(--blu);cursor:pointer;transition:all .2s;white-space:nowrap;font-family:inherit}
+.btn-comp:hover{background:rgba(0,144,255,.2);border-color:var(--blu)}
+
+/* ─ MAIN ─ */
+main{padding:28px;max-width:1700px;margin:0 auto}
+
+/* ─ BANNER ─ */
+#banner{display:none;align-items:center;gap:10px;background:rgba(0,229,160,.07);border:1px solid rgba(0,229,160,.25);border-radius:12px;padding:11px 18px;margin-bottom:20px;font-size:13px;color:var(--acc);cursor:pointer}
+#banner.on{display:flex}
+
+/* ─ KPI ─ */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:14px;margin-bottom:28px}
+.kpi{background:var(--sur);border:1px solid var(--bor);border-radius:14px;padding:18px 20px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+.kpi::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:14px 14px 0 0;background:var(--c)}
+.kpi:hover,.kpi.on{border-color:var(--acc);background:var(--sur2)}
+.kpi-lbl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.9px;color:var(--mut);margin-bottom:7px}
+.kpi-n{font-family:'Syne',sans-serif;font-size:30px;font-weight:800;color:var(--c)}
+.kpi-pct{font-size:11px;color:var(--mut);margin-top:3px}
+
+/* ─ TOOLBAR ─ */
+.toolbar{display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap;align-items:center}
+.srch{flex:1;min-width:240px;position:relative}
+.srch svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--mut);pointer-events:none}
+.srch input{width:100%;background:var(--sur);border:1px solid var(--bor);border-radius:11px;padding:10px 13px 10px 40px;color:var(--tex);font-family:inherit;font-size:13px;outline:none}
+.srch input::placeholder{color:var(--mut)}
+.srch input:focus{border-color:var(--acc)}
+select{background:var(--sur);border:1px solid var(--bor);border-radius:11px;padding:10px 14px;color:var(--tex);font-family:inherit;font-size:13px;outline:none;cursor:pointer}
+select:focus{border-color:var(--acc)}
+#rc{font-size:12px;color:var(--mut);margin-left:auto}
+
+/* ─ TABLE ─ */
+.twrap{background:var(--sur);border:1px solid var(--bor);border-radius:14px;overflow:hidden}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead{background:var(--sur2)}
+th{padding:12px 15px;text-align:left;font-family:'Syne',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--mut);white-space:nowrap;cursor:pointer;user-select:none;border-bottom:1px solid var(--bor)}
+th:hover{color:var(--tex)}
+.srt{color:var(--acc)!important}
+tbody tr{border-bottom:1px solid var(--bor);cursor:pointer;transition:background .12s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:var(--sur2)}
+td{padding:12px 15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px}
+.td-ped{font-family:'Syne',sans-serif;font-weight:700;color:var(--blu);font-size:12px}
+.td-cli{font-weight:500}
+
+/* ─ STATUS BADGE ─ */
+.st{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:99px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px}
+.st i{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.ENTREGUE{background:rgba(0,229,160,.1);color:var(--c-ent)} .ENTREGUE i{background:var(--c-ent)}
+.COLETADO{background:rgba(0,144,255,.1);color:var(--c-col)} .COLETADO i{background:var(--c-col)}
+.ENTREGAR{background:rgba(255,181,71,.1);color:var(--c-env)} .ENTREGAR i{background:var(--c-env)}
+.AGCOLETA{background:rgba(168,85,247,.1);color:var(--c-agc)} .AGCOLETA i{background:var(--c-agc)}
+.ENVSEDEX{background:rgba(34,211,238,.1);color:var(--c-sed)} .ENVSEDEX i{background:var(--c-sed)}
+.CANCELADO{background:rgba(255,77,106,.1);color:var(--c-can)} .CANCELADO i{background:var(--c-can)}
+.OUTRO{background:rgba(255,255,255,.06);color:var(--mut)} .OUTRO i{background:var(--mut)}
+
+/* ─ LOADING / EMPTY ─ */
+.state{text-align:center;padding:70px 20px;color:var(--mut)}
+.spin{width:34px;height:34px;border:3px solid var(--bor);border-top-color:var(--acc);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 14px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ─ PAGINATION ─ */
+.pag{display:flex;align-items:center;justify-content:center;gap:6px;padding:18px;border-top:1px solid var(--bor);flex-wrap:wrap}
+.pb{background:var(--sur2);border:1px solid var(--bor);border-radius:8px;padding:5px 11px;color:var(--tex);font-size:12px;cursor:pointer;font-family:inherit;transition:all .15s}
+.pb:hover:not(:disabled){border-color:var(--acc);color:var(--acc)}
+.pb.on{background:var(--acc);color:var(--bg);border-color:var(--acc);font-weight:700}
+.pb:disabled{opacity:.3;cursor:not-allowed}
+
+/* ─ MODAL ─ */
+.ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:400;backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:16px}
+.ov.on{display:flex}
+.modal{background:var(--sur);border:1px solid var(--bor);border-radius:18px;width:100%;max-width:700px;max-height:92vh;overflow-y:auto;animation:up .22s ease}
+@keyframes up{from{transform:translateY(18px);opacity:0}to{transform:none;opacity:1}}
+.mh{padding:22px 26px;border-bottom:1px solid var(--bor);display:flex;align-items:flex-start;justify-content:space-between;gap:14px}
+.mt{font-family:'Syne',sans-serif;font-size:17px;font-weight:800}
+.ms{margin-top:5px;display:flex;align-items:center;gap:8px;font-size:13px;color:var(--mut)}
+.mc{background:var(--sur2);border:1px solid var(--bor);border-radius:7px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--mut);flex-shrink:0;transition:all .15s}
+.mc:hover{border-color:var(--acc);color:var(--tex)}
+.mb{padding:22px 26px}
+.ms2{margin-bottom:20px}
+.ms2-t{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.9px;color:var(--acc);margin-bottom:10px;padding-bottom:7px;border-bottom:1px solid var(--bor)}
+.mg{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mf label{font-size:10px;color:var(--mut);display:block;margin-bottom:2px;text-transform:uppercase;letter-spacing:.4px}
+.mf span{font-size:13px;font-weight:500;word-break:break-word}
+.mf span.nil{color:var(--mut);font-style:italic}
+
+/* ─ COMPROVANTES MODAL ─ */
+.cdrop{border:2px dashed var(--bor);border-radius:11px;padding:18px;text-align:center;cursor:pointer;position:relative;transition:all .2s}
+.cdrop:hover,.cdrop.drag{border-color:var(--acc);background:rgba(0,229,160,.03)}
+.cdrop input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.cdrop-txt{font-size:12px;color:var(--mut)}
+.cdrop-txt b{color:var(--acc)}
+.clist{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:9px;margin-top:12px}
+.ci{background:var(--sur2);border:1px solid var(--bor);border-radius:9px;overflow:hidden;position:relative;cursor:pointer;transition:border-color .15s}
+.ci:hover{border-color:var(--acc)}
+.ci-img{width:100%;height:85px;object-fit:cover;display:block}
+.ci-pdf{width:100%;height:85px;display:flex;align-items:center;justify-content:center;font-size:30px;background:rgba(255,77,106,.07)}
+.ci-nm{padding:5px 7px;font-size:10px;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ci-del{position:absolute;top:3px;right:3px;background:rgba(0,0,0,.6);border:none;border-radius:50%;width:20px;height:20px;color:#fff;font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .15s}
+.ci:hover .ci-del{opacity:1}
+
+/* ─ PASTA COMPROVANTES ─ */
+.pasta-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:500;backdrop-filter:blur(8px);align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto}
+.pasta-ov.on{display:flex}
+.pasta-box{background:var(--sur);border:1px solid var(--bor);border-radius:18px;width:100%;max-width:960px;margin:auto;animation:up .22s ease}
+.pasta-hd{padding:22px 26px;border-bottom:1px solid var(--bor);display:flex;align-items:center;justify-content:space-between;gap:14px}
+.pasta-hd-t{font-family:'Syne',sans-serif;font-size:17px;font-weight:800}
+.pasta-body{padding:22px 26px}
+.pasta-search{width:100%;background:var(--sur2);border:1px solid var(--bor);border-radius:11px;padding:10px 16px;color:var(--tex);font-family:inherit;font-size:13px;outline:none;margin-bottom:18px}
+.pasta-search::placeholder{color:var(--mut)}
+.pasta-search:focus{border-color:var(--acc)}
+.pasta-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+.pasta-card{background:var(--sur2);border:1px solid var(--bor);border-radius:12px;overflow:hidden;cursor:pointer;transition:all .2s}
+.pasta-card:hover{border-color:var(--acc);transform:translateY(-2px)}
+.pasta-card-img{width:100%;height:130px;object-fit:cover;display:block;background:var(--bg)}
+.pasta-card-pdf{width:100%;height:130px;display:flex;align-items:center;justify-content:center;font-size:40px;background:rgba(255,77,106,.07)}
+.pasta-card-info{padding:10px 12px}
+.pasta-card-ped{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--blu)}
+.pasta-card-nm{font-size:11px;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+.pasta-empty{text-align:center;padding:50px 20px;color:var(--mut);font-size:14px}
+
+/* ─ LIGHTBOX ─ */
+.lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.94);z-index:600;align-items:center;justify-content:center;flex-direction:column;gap:10px}
+.lb.on{display:flex}
+.lb img{max-width:92vw;max-height:82vh;border-radius:8px;object-fit:contain}
+.lb-x{position:absolute;top:18px;right:24px;background:none;border:none;color:#fff;font-size:26px;cursor:pointer;opacity:.6}
+.lb-x:hover{opacity:1}
+.lb-nm{color:rgba(255,255,255,.35);font-size:12px}
+
+@media(max-width:720px){
+  main{padding:14px} header{padding:0 14px}
+  .mg{grid-template-columns:1fr} .kpis{grid-template-columns:repeat(2,1fr)}
+  .pasta-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo"><div class="dot"></div>Kairos Logística</div>
+  <div class="h-right">
+    <div class="badge-live"><span></span>FRETE 2026</div>
+    <button class="btn-comp" onclick="abrirPasta()">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+      Pasta de Comprovantes
+    </button>
+    <span id="ts">—</span>
+  </div>
+</header>
+
+<main>
+  <div id="banner" onclick="reloadData()">🔄 Novos dados disponíveis — clique para atualizar</div>
+
+  <div class="kpis" id="kpis"></div>
+
+  <div class="toolbar">
+    <div class="srch">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input id="srch" placeholder="Buscar por pedido, cliente, NF, rastreio, transportadora…" oninput="onSearch()">
+    </div>
+    <select id="f-tr" onchange="onFilter()"><option value="">Todas as transportadoras</option></select>
+    <select id="f-uf" onchange="onFilter()"><option value="">Todos os estados</option></select>
+    <span id="rc"></span>
+  </div>
+
+  <div class="twrap">
+    <div id="loading" class="state"><div class="spin"></div><p>Conectando à planilha…</p></div>
+    <div id="errmsg" class="state" style="display:none"></div>
+    <table id="tbl" style="display:none">
+      <thead><tr>
+        <th onclick="srt('PED')">Pedido</th>
+        <th onclick="srt('CLI')">Cliente / Fornecedor</th>
+        <th onclick="srt('STA')">Status</th>
+        <th onclick="srt('COL')">Coleta</th>
+        <th onclick="srt('PRV')">Prev. Entrega</th>
+        <th onclick="srt('ENT')">Entregue em</th>
+        <th onclick="srt('TRA')">Transportadora</th>
+        <th>Estado</th>
+        <th>NF Saída</th>
+        <th>Comprov.</th>
+      </tr></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+    <div id="empty" class="state" style="display:none"><p>Nenhum resultado encontrado.</p></div>
+    <div class="pag" id="pag"></div>
+  </div>
+</main>
+
+<!-- MODAL DETALHES -->
+<div class="ov" id="ov" onclick="ovBg(event)">
+  <div class="modal">
+    <div class="mh">
+      <div><div class="mt" id="m-t"></div><div class="ms" id="m-s"></div></div>
+      <div class="mc" onclick="closeModal()"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></div>
+    </div>
+    <div class="mb" id="m-b"></div>
+  </div>
+</div>
+
+<!-- PASTA DE COMPROVANTES -->
+<div class="pasta-ov" id="pasta-ov" onclick="pastaOvBg(event)">
+  <div class="pasta-box">
+    <div class="pasta-hd">
+      <div class="pasta-hd-t">📁 Pasta de Comprovantes</div>
+      <div class="mc" onclick="fecharPasta()"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></div>
+    </div>
+    <div class="pasta-body">
+      <input class="pasta-search" id="pasta-srch" placeholder="Buscar por pedido ou nome do arquivo…" oninput="renderPasta()">
+      <div class="pasta-grid" id="pasta-grid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lb" id="lb" onclick="closeLb()">
+  <button class="lb-x">✕</button>
+  <img id="lb-img" src="" alt="">
+  <div class="lb-nm" id="lb-nm"></div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════
+//  CONFIGURAÇÃO
+// ══════════════════════════════════════════════════════
+const SHEET_ID = '1JgxDbNME60Frei6d2YWlozgfGu3JCHvzIFxPhswRLiE';
+const GID      = '1932667028';
+const PG_SZ    = 50;
+
+// ══════════════════════════════════════════════════════
+//  ESTADO
+// ══════════════════════════════════════════════════════
+let rows = [], filt = [], pg = 1, sCol = 'COL', sDir = -1;
+let aSt = '', srchVal = '', fTr = '', fUf = '';
+let curRec = null;
+let hdrs = [];   // headers originais detectados
+
+let comps = {};
+try { comps = JSON.parse(localStorage.getItem('kf2') || '{}'); } catch(e) {}
+const saveComps = () => { try { localStorage.setItem('kf2', JSON.stringify(comps)); } catch(e) {} };
+
+// ══════════════════════════════════════════════════════
+//  FETCH — Google Visualization API (JSONP, sem CORS)
+// ══════════════════════════════════════════════════════
+function fetchSheet() {
+  return new Promise((resolve, reject) => {
+    const fn = '_kf_' + Date.now();
+    const sc = document.createElement('script');
+    const tm = setTimeout(() => { clean(); reject(new Error('Timeout ao carregar planilha')); }, 15000);
+
+    function clean() {
+      clearTimeout(tm);
+      delete window[fn];
+      sc.parentNode && sc.parentNode.removeChild(sc);
+    }
+
+    window[fn] = function(resp) {
+      clean();
+      try {
+        const t = resp.table;
+        if (!t || !t.cols) { reject(new Error('Planilha vazia ou sem permissão')); return; }
+
+        // Captura labels das colunas
+        hdrs = t.cols.map(c => String(c.label || c.id || '').trim());
+        console.log('[Kairos] Colunas detectadas:', hdrs);
+
+        const data = (t.rows || []).map(row => {
+          const r = {};
+          hdrs.forEach((h, i) => {
+            const cell = row.c && row.c[i];
+            let v = '';
+            if (cell && cell.v != null) {
+              // Datas retornam como "Date(YYYY,MM,DD)" — formata para DD/MM/YYYY
+              const dm = String(cell.v).match(/^Date\((\d+),(\d+),(\d+)\)/);
+              if (dm) {
+                const d = new Date(+dm[1], +dm[2], +dm[3]);
+                v = d.toLocaleDateString('pt-BR');
+              } else {
+                // Prefere cell.f (valor formatado pelo Sheets) se disponível
+                v = cell.f != null ? String(cell.f) : String(cell.v);
+              }
+            }
+            r[h] = v.trim();
+          });
+          return r;
+        });
+
+        resolve(data);
+      } catch(e) { reject(e); }
+    };
+
+    sc.onerror = () => { clean(); reject(new Error('Erro ao carregar script da planilha')); };
+    // URL limpa — só um tqx
+    sc.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?gid=${GID}&tqx=out:json;responseHandler:${fn}&nocache=${Date.now()}`;
+    document.head.appendChild(sc);
+  });
+}
+
+// ══════════════════════════════════════════════════════
+//  MAPEIA HEADER ORIGINAL → CHAVE INTERNA
+//  (funciona com qualquer nome de coluna da planilha)
+// ══════════════════════════════════════════════════════
+const MAP = [
+  { key:'PED', patterns:['pedido','n pedido','nr pedido','no pedido','num pedido'] },
+  { key:'CLI', patterns:['cliente','forn','nome'] },
+  { key:'STA', patterns:['status'] },
+  { key:'COL', patterns:['data da coleta','data coleta','dt coleta','coleta'] },
+  { key:'PRV', patterns:['prev','previsao','previsão'] },
+  { key:'ENT', patterns:['entregue','data entrega','dt entrega','data de entrega'] },
+  { key:'COL2',patterns:['coletada'] },
+  { key:'TRA', patterns:['transportadora','transp'] },
+  { key:'PRA', patterns:['prazo'] },
+  { key:'UF',  patterns:['estado','uf'] },
+  { key:'CEP', patterns:['cep'] },
+  { key:'NF',  patterns:['nf','nota fiscal','nf saida','nf saída','n nf','num nf','numero nf'] },
+  { key:'RAT', patterns:['rastreio','prot','protocolo coleta','cod rastreio'] },
+  { key:'NPR', patterns:['n protocolo','nº protocolo','no protocolo','num protocolo'] },
+  { key:'CTE', patterns:['cte','ct-e','ct e'] },
+  { key:'PES', patterns:['peso'] },
+  { key:'VOL', patterns:['volume'] },
+  { key:'DIM', patterns:['dimen'] },
+  { key:'CUS', patterns:['custo','valor frete','valor'] },
+  { key:'CNP', patterns:['cnpj','cpf'] },
+  { key:'NPC', patterns:['pedido cliente'] },
+  { key:'HOR', patterns:['hora'] },
+  { key:'OBS', patterns:['obs'] },
+];
+
+function norm(s) {
+  return String(s||'').toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .replace(/[^\w\s]/g,' ').replace(/\s+/g,' ').trim();
+}
+
+function buildMap(headers) {
+  const m = {};
+  headers.forEach(h => {
+    const nh = norm(h);
+    MAP.forEach(({ key, patterns }) => {
+      if (!m[key] && patterns.some(p => nh.includes(p))) {
+        m[key] = h; // guarda o header original
+      }
+    });
+  });
+  console.log('[Kairos] Mapeamento final:', m);
+  return m;
+}
+
+let hmap = {};
+
+function g(row, key) { return hmap[key] ? (row[hmap[key]] || '') : ''; }
+
+// ══════════════════════════════════════════════════════
+//  STATUS → CLASSE CSS
+// ══════════════════════════════════════════════════════
+function stClass(s) {
+  const n = norm(s);
+  if (n.includes('entregue'))  return 'ENTREGUE';
+  if (n.includes('coletado'))  return 'COLETADO';
+  if (n.includes('entregar'))  return 'ENTREGAR';
+  if (n.includes('ag') && n.includes('coleta')) return 'AGCOLETA';
+  if (n.includes('sedex'))     return 'ENVSEDEX';
+  if (n.includes('env'))       return 'ENVSEDEX';
+  if (n.includes('cancel'))    return 'CANCELADO';
+  return 'OUTRO';
+}
+
+// ══════════════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════════════
+async function init() {
+  show('loading', true); hide('errmsg'); hide('tbl'); hide('empty');
+  try {
+    const data = await fetchSheet();
+    const valid = data.filter(r => Object.values(r).some(v => v));
+    if (!valid.length) throw new Error('Nenhuma linha encontrada na planilha');
+
+    hmap = buildMap(hdrs);
+    rows = valid;
+    show('tbl', true); hide('loading');
+    buildFilters();
+    render();
+    setTs();
+    setInterval(autoRefresh, 5 * 60 * 1000);
+  } catch(e) {
+    hide('loading');
+    const el = document.getElementById('errmsg');
+    el.style.display = 'block';
+    el.innerHTML = `
+      <div style="font-size:34px;margin-bottom:14px">⚠️</div>
+      <p style="font-size:14px;margin-bottom:8px"><b>Erro ao carregar planilha</b></p>
+      <p style="font-size:12px;max-width:380px;margin:0 auto 6px;color:var(--mut)">${e.message}</p>
+      <p style="font-size:12px;max-width:380px;margin:0 auto 20px;color:var(--mut)">
+        A planilha precisa estar <b style="color:var(--acc)">pública</b>:<br>
+        Compartilhar → Qualquer pessoa com o link → Visualizador
+      </p>
+      <button onclick="init()" style="padding:9px 22px;background:var(--acc);color:var(--bg);border:none;border-radius:9px;cursor:pointer;font-family:inherit;font-weight:700;font-size:13px">↺ Tentar novamente</button>
+    `;
+    console.error('[Kairos]', e);
+  }
+}
+
+async function autoRefresh() {
+  try {
+    const data = await fetchSheet();
+    const valid = data.filter(r => Object.values(r).some(v => v));
+    if (!valid.length) return;
+    if (valid.length !== rows.length) {
+      window._nd = valid;
+      document.getElementById('banner').classList.add('on');
+    } else {
+      rows = valid; render(); setTs();
+    }
+  } catch(e) {}
+}
+
+function reloadData() {
+  if (!window._nd) return;
+  rows = window._nd; window._nd = null;
+  document.getElementById('banner').classList.remove('on');
+  buildFilters(); render(); setTs();
+}
+
+function setTs() {
+  document.getElementById('ts').textContent = 'Atualizado: ' + new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+}
+function show(id, b) { const el = document.getElementById(id); if(b) { el.style.removeProperty('display'); } else { el.style.display='none'; } }
+function hide(id) { document.getElementById(id).style.display = 'none'; }
+
+// ══════════════════════════════════════════════════════
+//  FILTROS SELECT
+// ══════════════════════════════════════════════════════
+function buildFilters() {
+  fillSel('f-tr', 'Todas as transportadoras', [...new Set(rows.map(r=>g(r,'TRA')).filter(Boolean))].sort(), fTr);
+  fillSel('f-uf', 'Todos os estados',         [...new Set(rows.map(r=>g(r,'UF')).filter(Boolean))].sort(), fUf);
+}
+function fillSel(id, ph, opts, cur) {
+  const s = document.getElementById(id);
+  s.innerHTML = `<option value="">${ph}</option>` + opts.map(o=>`<option value="${o}">${o}</option>`).join('');
+  s.value = cur;
+}
+function onSearch() { srchVal = document.getElementById('srch').value; pg = 1; render(); }
+function onFilter() { fTr = document.getElementById('f-tr').value; fUf = document.getElementById('f-uf').value; pg = 1; render(); }
+
+// ══════════════════════════════════════════════════════
+//  KPIs
+// ══════════════════════════════════════════════════════
+const KPIS = [
+  { st:'',            lbl:'Total',      cls:'all',     c:'var(--acc)' },
+  { st:'ENTREGUE',    lbl:'Entregue',   cls:'entregue',c:'var(--c-ent)' },
+  { st:'COLETADO',    lbl:'Coletado',   cls:'coletado',c:'var(--c-col)' },
+  { st:'ENTREGAR',    lbl:'A Entregar', cls:'entregar',c:'var(--c-env)' },
+  { st:'AGCOLETA',    lbl:'Ag. Coleta', cls:'agcoleta',c:'var(--c-agc)' },
+  { st:'ENVSEDEX',    lbl:'Env. Sedex', cls:'envsedex',c:'var(--c-sed)' },
+  { st:'CANCELADO',   lbl:'Cancelado',  cls:'cancelado',c:'var(--c-can)' },
+];
+
+function renderKPIs() {
+  const tot = rows.length;
+  const cnt = {};
+  rows.forEach(r => { const sc = stClass(g(r,'STA')); cnt[sc] = (cnt[sc]||0)+1; });
+  document.getElementById('kpis').innerHTML = KPIS.map(k => {
+    const v = k.st ? (cnt[k.st]||0) : tot;
+    return `<div class="kpi${aSt===k.st?' on':''}" onclick="setSt('${k.st}')" style="--c:${k.c}">
+      <div class="kpi-lbl">${k.lbl}</div>
+      <div class="kpi-n">${v}</div>
+      ${k.st && tot ? `<div class="kpi-pct">${Math.round(v/tot*100)}% do total</div>` : ''}
+    </div>`;
+  }).join('');
+}
+function setSt(s) { aSt = s; pg = 1; render(); }
+
+// ══════════════════════════════════════════════════════
+//  SORT
+// ══════════════════════════════════════════════════════
+function srt(col) { if(sCol===col) sDir*=-1; else{sCol=col;sDir=-1;} render(); }
+function pdate(s) {
+  if (!s) return 0;
+  const m = String(s).match(/(\d{2})\/(\d{2})\/(\d{4})/);
+  return m ? new Date(+m[3],+m[2]-1,+m[1]).getTime() : 0;
+}
+
+// ══════════════════════════════════════════════════════
+//  RENDER
+// ══════════════════════════════════════════════════════
+function ck(r) { return g(r,'PED') + '|' + g(r,'NF'); }
+
+function render() {
+  renderKPIs();
+  const q = srchVal.toLowerCase();
+  filt = rows.filter(r => {
+    if (aSt && stClass(g(r,'STA')) !== aSt) return false;
+    if (fTr && g(r,'TRA') !== fTr) return false;
+    if (fUf && g(r,'UF') !== fUf) return false;
+    if (q) {
+      const hay = [g(r,'PED'),g(r,'CLI'),g(r,'TRA'),g(r,'NF'),g(r,'UF'),g(r,'STA'),g(r,'NPC'),g(r,'RAT'),g(r,'CTE')].join(' ').toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    return true;
+  });
+
+  filt.sort((a,b) => {
+    const av = g(a,sCol)||'', bv = g(b,sCol)||'';
+    const da = pdate(av), db = pdate(bv);
+    if (da||db) return (da-db)*sDir;
+    return av.localeCompare(bv,'pt-BR')*sDir;
+  });
+
+  const tot = filt.length;
+  document.getElementById('rc').textContent = tot + ' registro' + (tot!==1?'s':'');
+
+  const pages = Math.max(1, Math.ceil(tot/PG_SZ));
+  if (pg > pages) pg = 1;
+  const sl = filt.slice((pg-1)*PG_SZ, pg*PG_SZ);
+
+  document.getElementById('tbody').innerHTML = sl.map((r,i) => {
+    const key = ck(r);
+    const nc = (comps[key]||[]).length;
+    const cIcon = nc ? `<span style="color:var(--acc);font-size:12px;font-weight:700">📎 ${nc}</span>` : `<span style="color:var(--mut);font-size:12px">—</span>`;
+    const sc = stClass(g(r,'STA'));
+    return `<tr onclick="openModal(${(pg-1)*PG_SZ+i})">
+      <td class="td-ped">${g(r,'PED')||'—'}</td>
+      <td class="td-cli" title="${g(r,'CLI')}">${g(r,'CLI')||'—'}</td>
+      <td><span class="st ${sc}"><i></i>${g(r,'STA')||'—'}</span></td>
+      <td>${g(r,'COL')||'—'}</td>
+      <td>${g(r,'PRV')||'—'}</td>
+      <td>${g(r,'ENT')||'—'}</td>
+      <td title="${g(r,'TRA')}">${g(r,'TRA')||'—'}</td>
+      <td>${g(r,'UF')||'—'}</td>
+      <td>${g(r,'NF')||'—'}</td>
+      <td>${cIcon}</td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('empty').style.display = sl.length ? 'none' : 'block';
+  renderPag(pages);
+}
+
+function renderPag(total) {
+  const el = document.getElementById('pag');
+  if (total <= 1) { el.innerHTML=''; return; }
+  let h = `<button class="pb" onclick="goPg(${pg-1})" ${pg===1?'disabled':''}>‹ Anterior</button>`;
+  let ps = [];
+  for (let i=1;i<=total;i++) {
+    if (i===1||i===total||Math.abs(i-pg)<=2) ps.push(i);
+    else if (ps[ps.length-1]!=='…') ps.push('…');
+  }
+  ps.forEach(p => {
+    h += p==='…' ? `<span style="color:var(--mut);font-size:13px">…</span>`
+      : `<button class="pb${p===pg?' on':''}" onclick="goPg(${p})">${p}</button>`;
+  });
+  h += `<button class="pb" onclick="goPg(${pg+1})" ${pg===total?'disabled':''}>Próxima ›</button>`;
+  el.innerHTML = h;
+}
+function goPg(p) { pg=p; render(); window.scrollTo({top:0,behavior:'smooth'}); }
+
+// ══════════════════════════════════════════════════════
+//  MODAL DETALHES
+// ══════════════════════════════════════════════════════
+function openModal(idx) {
+  const r = filt[idx]; if(!r) return;
+  curRec = r;
+  const sc = stClass(g(r,'STA'));
+  document.getElementById('m-t').textContent = g(r,'PED') || 'Pedido';
+  document.getElementById('m-s').innerHTML = `<span class="st ${sc}"><i></i>${g(r,'STA')||'—'}</span><span>${g(r,'CLI')}</span>`;
+
+  const f = (lbl,val) => `<div class="mf"><label>${lbl}</label><span class="${val?'':'nil'}">${val||'Não informado'}</span></div>`;
+
+  document.getElementById('m-b').innerHTML = `
+    <div class="ms2"><div class="ms2-t">Identificação</div><div class="mg">
+      ${f('Pedido Interno',g(r,'PED'))} ${f('Pedido Cliente',g(r,'NPC'))}
+      ${f('NF Saída',g(r,'NF'))} ${f('Status',g(r,'STA'))}
+    </div></div>
+    <div class="ms2"><div class="ms2-t">Cliente / Fornecedor</div><div class="mg">
+      ${f('Nome',g(r,'CLI'))} ${f('CNPJ/CPF',g(r,'CNP'))}
+      ${f('Estado',g(r,'UF'))} ${f('CEP',g(r,'CEP'))}
+    </div></div>
+    <div class="ms2"><div class="ms2-t">Logística</div><div class="mg">
+      ${f('Transportadora',g(r,'TRA'))} ${f('Prazo',g(r,'PRA'))}
+      ${f('Data da Coleta',g(r,'COL'))} ${f('Coletada em',g(r,'COL2'))}
+      ${f('Prev. Entrega',g(r,'PRV'))} ${f('Entregue em',g(r,'ENT'))}
+    </div></div>
+    <div class="ms2"><div class="ms2-t">Carga</div><div class="mg">
+      ${f('Peso',g(r,'PES'))} ${f('Volume',g(r,'VOL'))}
+      ${f('Dimensão',g(r,'DIM'))} ${f('Custo',g(r,'CUS'))}
+    </div></div>
+    <div class="ms2"><div class="ms2-t">Rastreio</div><div class="mg">
+      ${f('Nº Protocolo',g(r,'NPR'))} ${f('Rastreio / Prot. Coleta',g(r,'RAT'))}
+      ${f('Nº CTE',g(r,'CTE'))} ${f('Horas',g(r,'HOR'))}
+    </div></div>
+    ${g(r,'OBS')?`<div class="ms2"><div class="ms2-t">Observações</div><div class="mf"><span>${g(r,'OBS')}</span></div></div>`:''}
+    <div class="ms2">
+      <div class="ms2-t">📎 Comprovantes de Entrega</div>
+      <div class="cdrop" id="cdrop" ondragover="dO(event)" ondragleave="dL()" ondrop="dD(event)">
+        <input type="file" id="cinput" accept="image/*,.pdf" multiple onchange="onFS(event)">
+        <div style="font-size:26px;margin-bottom:7px">📄</div>
+        <div class="cdrop-txt">Arraste arquivos aqui ou <b>clique para selecionar</b><br><span style="font-size:10px">JPG · PNG · PDF</span></div>
+      </div>
+      <div class="clist" id="clist"></div>
+    </div>
+  `;
+  renderComps();
+  document.getElementById('ov').classList.add('on');
+  document.body.style.overflow='hidden';
+}
+
+function renderComps() {
+  if(!curRec) return;
+  const key=ck(curRec), cs=comps[key]||[];
+  const el=document.getElementById('clist'); if(!el) return;
+  if(!cs.length){el.innerHTML='<p style="font-size:12px;color:var(--mut);font-style:italic;margin-top:8px">Nenhum comprovante anexado.</p>';return;}
+  el.innerHTML=cs.map((c,i)=>{
+    const pdf=c.name.toLowerCase().endsWith('.pdf');
+    return `<div class="ci" onclick="openLb('${ck(curRec)}',${i})">
+      ${pdf?`<div class="ci-pdf">📄</div>`:`<img class="ci-img" src="${c.dataUrl}">`}
+      <div class="ci-nm" title="${c.name}">${c.name}</div>
+      <button class="ci-del" onclick="delC(event,'${ck(curRec)}',${i})">✕</button>
+    </div>`;
+  }).join('');
+}
+
+function dO(e){e.preventDefault();document.getElementById('cdrop').classList.add('drag');}
+function dL(){document.getElementById('cdrop').classList.remove('drag');}
+function dD(e){e.preventDefault();dL();hf(e.dataTransfer.files);}
+function onFS(e){hf(e.target.files);}
+function hf(files){
+  if(!curRec||!files||!files.length)return;
+  const key=ck(curRec); if(!comps[key]) comps[key]=[];
+  Array.from(files).forEach(f=>{
+    const rd=new FileReader();
+    rd.onload=ev=>{ comps[key].push({name:f.name,dataUrl:ev.target.result,ped:g(curRec,'PED')}); saveComps(); renderComps(); render(); renderPasta(); };
+    rd.readAsDataURL(f);
+  });
+  document.getElementById('cinput').value='';
+}
+function delC(e,key,i){
+  e.stopPropagation();
+  if(comps[key]){comps[key].splice(i,1);if(!comps[key].length)delete comps[key];}
+  saveComps();renderComps();render();renderPasta();
+}
+
+function closeModal(){document.getElementById('ov').classList.remove('on');document.body.style.overflow='';}
+function ovBg(e){if(e.target===document.getElementById('ov'))closeModal();}
+
+// ══════════════════════════════════════════════════════
+//  LIGHTBOX
+// ══════════════════════════════════════════════════════
+function openLb(key,i){
+  const cs=comps[key]||[],c=cs[i]; if(!c)return;
+  if(c.name.toLowerCase().endsWith('.pdf')){const a=document.createElement('a');a.href=c.dataUrl;a.download=c.name;a.click();return;}
+  document.getElementById('lb-img').src=c.dataUrl;
+  document.getElementById('lb-nm').textContent=c.name;
+  document.getElementById('lb').classList.add('on');
+}
+function closeLb(){document.getElementById('lb').classList.remove('on');document.getElementById('lb-img').src='';}
+
+// ══════════════════════════════════════════════════════
+//  PASTA DE COMPROVANTES
+// ══════════════════════════════════════════════════════
+function abrirPasta(){document.getElementById('pasta-ov').classList.add('on');document.getElementById('pasta-srch').value='';renderPasta();document.body.style.overflow='hidden';}
+function fecharPasta(){document.getElementById('pasta-ov').classList.remove('on');document.body.style.overflow='';}
+function pastaOvBg(e){if(e.target===document.getElementById('pasta-ov'))fecharPasta();}
+
+function renderPasta(){
+  const q=document.getElementById('pasta-srch').value.toLowerCase();
+  const grid=document.getElementById('pasta-grid');
+
+  // Junta todos comprovantes de todas chaves
+  const all=[];
+  Object.entries(comps).forEach(([key,cs])=>{
+    cs.forEach((c,i)=>{ all.push({key,i,c}); });
+  });
+
+  const filtered=all.filter(({key,c})=>{
+    if(!q) return true;
+    return key.toLowerCase().includes(q)||c.name.toLowerCase().includes(q)||(c.ped||'').toLowerCase().includes(q);
+  });
+
+  if(!filtered.length){
+    grid.innerHTML=`<div class="pasta-empty" style="grid-column:1/-1">
+      ${all.length===0?'📭 Nenhum comprovante salvo ainda.<br><span style="font-size:12px;margin-top:6px;display:block">Abra um pedido e anexe arquivos.</span>':'🔍 Nenhum resultado para "'+q+'"'}
+    </div>`;
+    return;
+  }
+
+  grid.innerHTML=filtered.map(({key,i,c})=>{
+    const pdf=c.name.toLowerCase().endsWith('.pdf');
+    const ped=key.split('|')[0]||'—';
+    return `<div class="pasta-card" onclick="openLbPasta('${key}',${i})">
+      ${pdf?`<div class="pasta-card-pdf">📄</div>`:`<img class="pasta-card-img" src="${c.dataUrl}" alt="">`}
+      <div class="pasta-card-info">
+        <div class="pasta-card-ped">📦 Pedido ${ped}</div>
+        <div class="pasta-card-nm">${c.name}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function openLbPasta(key,i){
+  const cs=comps[key]||[],c=cs[i]; if(!c)return;
+  if(c.name.toLowerCase().endsWith('.pdf')){const a=document.createElement('a');a.href=c.dataUrl;a.download=c.name;a.click();return;}
+  document.getElementById('lb-img').src=c.dataUrl;
+  document.getElementById('lb-nm').textContent=c.name+' — Pedido '+key.split('|')[0];
+  document.getElementById('lb').classList.add('on');
+}
+
+// ── ESC fecha modais
+document.addEventListener('keydown',e=>{
+  if(e.key!=='Escape')return;
+  if(document.getElementById('lb').classList.contains('on')){closeLb();return;}
+  if(document.getElementById('pasta-ov').classList.contains('on')){fecharPasta();return;}
+  if(document.getElementById('ov').classList.contains('on')){closeModal();}
+});
+
+// ══════════════════════════════════════════════════════
+//  START
+// ══════════════════════════════════════════════════════
+init();
+</script>
+</body>
+</html>
